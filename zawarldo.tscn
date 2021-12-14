@@ -81,7 +81,7 @@ material = SubResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 
 [node name="CameraPos" type="Position3D" parent="."]
-transform = Transform( -4.14319e-08, -0.318711, 0.947852, -1.39313e-08, 0.947852, 0.318711, -1, 0, -4.37114e-08, 0, 0, 0 )
+transform = Transform( -3.46934e-08, -0.608318, 0.793693, -2.65904e-08, 0.793693, 0.608318, -1, 0, -4.37114e-08, 0, 0, 0 )
 script = ExtResource( 3 )
 targetNodePath = NodePath("../mainRocket")
 lerpSpeed = 10.0
@@ -115,10 +115,8 @@ __meta__ = {
 }
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.177703, 0.984084, 0, -0.984084, 0.177703, -4.89912, 1.81852, 0 )
+transform = Transform( 0.755991, -0.116321, -0.644164, 0.647049, 0.281666, 0.708514, 0.099024, -0.952436, 0.288202, -4.25314, 2.37694, -1.2708 )
 light_energy = 0.75
 light_indirect_energy = 0.0
 shadow_enabled = true
-shadow_bias = -0.041
 shadow_contact = 0.141
-shadow_reverse_cull_face = true

@@ -14,7 +14,6 @@ func _ready():
 	camera = get_node("SpringArm/Camera")
 	springArmNode = get_node("SpringArm")
 	print(targetNode.get("speed"))
-	
 func _physics_process(delta):
 	self.translation = lerp(self.translation,targetNode.translation,lerpSpeed*delta)
 	
