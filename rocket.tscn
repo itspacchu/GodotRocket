@@ -1,0 +1,179 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://rocket.gd" type="Script" id=1]
+[ext_resource path="res://rocketmat.tres" type="Material" id=2]
+
+[sub_resource type="PhysicsMaterial" id=10]
+rough = true
+bounce = 0.03
+absorbent = true
+
+[sub_resource type="CylinderShape" id=1]
+radius = 0.5
+
+[sub_resource type="VisualShaderNodeColorConstant" id=6]
+constant = Color( 1, 0.687765, 0.175958, 1 )
+
+[sub_resource type="VisualShaderNodeVectorOp" id=7]
+default_input_values = [ 0, Vector3( 0, 0, 0 ), 1, Vector3( 5, 5, 5 ) ]
+operator = 2
+
+[sub_resource type="VisualShader" id=8]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx;
+
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:2
+	vec3 n_out2p0 = vec3(1.000000, 0.687765, 0.175958);
+	float n_out2p1 = 1.000000;
+
+// VectorOp:3
+	vec3 n_in3p1 = vec3(5.00000, 5.00000, 5.00000);
+	vec3 n_out3p0 = n_out2p0 * n_in3p1;
+
+// Output:0
+	EMISSION = n_out3p0;
+	RIM = dot(n_out2p0, vec3(0.333333, 0.333333, 0.333333));
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -266.4, 112 )
+nodes/fragment/2/node = SubResource( 6 )
+nodes/fragment/2/position = Vector2( -100, 380 )
+nodes/fragment/3/node = SubResource( 7 )
+nodes/fragment/3/position = Vector2( 120, 240 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 10, 2, 0, 3, 0, 3, 0, 0, 5 )
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+lifetime_randomness = 0.21
+emission_shape = 2
+emission_box_extents = Vector3( 0.1, 0.1, 0.1 )
+linear_accel = 89.55
+linear_accel_random = 0.37
+scale = 2.0
+scale_curve = SubResource( 3 )
+color = Color( 0.988235, 0.733333, 0.47451, 1 )
+
+[sub_resource type="SphereMesh" id=5]
+radius = 0.1
+height = 0.2
+radial_segments = 15
+rings = 11
+
+[node name="RigidBody" type="RigidBody"]
+mass = 5.0
+physics_material_override = SubResource( 10 )
+can_sleep = false
+axis_lock_angular_y = true
+linear_damp = 0.01
+angular_damp = 0.01
+script = ExtResource( 1 )
+thrustForce = 100.0
+sideForce = 10.0
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.104983, 0 )
+radius = 0.25
+height = 1.25
+smooth_faces = false
+material = ExtResource( 2 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="CSGCylinder"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.861157, 0 )
+radius = 0.408734
+height = 0.48244
+smooth_faces = false
+material = ExtResource( 2 )
+
+[node name="CSGCylinder2" type="CSGCylinder" parent="CSGCylinder"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.862619, 0 )
+radius = 0.24
+height = 0.48244
+cone = true
+smooth_faces = false
+material = ExtResource( 2 )
+
+[node name="SideZp" type="Particles" parent="."]
+transform = Transform( 0.337528, 0, 0, 0, 0.257384, 0.218355, 0, -0.218355, 0.257384, 0.0199192, 0.596257, 0.269853 )
+material_override = SubResource( 9 )
+amount = 120
+lifetime = 0.18
+preprocess = 0.53
+randomness = 1.0
+fixed_fps = 24
+visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="SideZn" type="Particles" parent="."]
+transform = Transform( 0.337528, 0, 0, 0, 0.291634, -0.169926, 0, 0.169926, 0.291634, -0.00727287, 0.614704, -0.284401 )
+material_override = SubResource( 9 )
+amount = 120
+lifetime = 0.18
+preprocess = 0.53
+randomness = 1.0
+fixed_fps = 24
+visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="SideXp" type="Particles" parent="."]
+transform = Transform( -1.47538e-08, -0.218355, 0.257384, 0, 0.257384, 0.218355, -0.337528, 9.54459e-09, -1.12506e-08, 0.28345, 0.596257, -0.02087 )
+material_override = SubResource( 9 )
+amount = 120
+lifetime = 0.18
+preprocess = 0.53
+randomness = 1.0
+fixed_fps = 24
+visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="SideXn" type="Particles" parent="."]
+transform = Transform( -1.47538e-08, 0.169926, 0.291634, 0, 0.291634, -0.169926, -0.337528, -7.4277e-09, -1.27477e-08, -0.270804, 0.614704, 0.00632208 )
+material_override = SubResource( 9 )
+amount = 120
+lifetime = 0.18
+preprocess = 0.53
+randomness = 1.0
+fixed_fps = 24
+visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
+
+[node name="Booster" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00435162, -1.04836, -0.00256479 )
+material_override = SubResource( 9 )
+amount = 120
+lifetime = 0.18
+preprocess = 0.53
+randomness = 1.0
+fixed_fps = 24
+visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
