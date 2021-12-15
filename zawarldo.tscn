@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://rocket.tscn" type="PackedScene" id=1]
 [ext_resource path="res://RichTextLabel.gd" type="Script" id=2]
 [ext_resource path="res://CameraPos.gd" type="Script" id=3]
+[ext_resource path="res://textures/Prototype Blue.png" type="Texture" id=4]
+[ext_resource path="res://turbulence.gd" type="Script" id=5]
+[ext_resource path="res://rocketModified.tscn" type="PackedScene" id=6]
 
 [sub_resource type="BoxShape" id=1]
 margin = 0.001
@@ -11,10 +14,15 @@ extents = Vector3( 50, 0.1, 50 )
 [sub_resource type="VisualShaderNodeColorConstant" id=2]
 constant = Color( 1, 0.266667, 0.266667, 1 )
 
+[sub_resource type="VisualShaderNodeTexture" id=6]
+texture = ExtResource( 4 )
+texture_type = 1
+
 [sub_resource type="VisualShader" id=3]
 code = "shader_type spatial;
 render_mode specular_schlick_ggx;
 
+uniform sampler2D tex_frg_4 : hint_albedo;
 
 
 
@@ -24,12 +32,13 @@ void vertex() {
 }
 
 void fragment() {
-// Color:2
-	vec3 n_out2p0 = vec3(1.000000, 0.266667, 0.266667);
-	float n_out2p1 = 1.000000;
+// Texture:4
+	vec4 tex_frg_4_read = texture(tex_frg_4, UV.xy);
+	vec3 n_out4p0 = tex_frg_4_read.rgb;
+	float n_out4p1 = tex_frg_4_read.a;
 
 // Output:0
-	ALBEDO = n_out2p0;
+	ALBEDO = n_out4p0;
 
 }
 
@@ -38,24 +47,31 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -288, 62.4 )
+graph_offset = Vector2( -559, 319 )
+nodes/fragment/0/position = Vector2( 340, 260 )
 nodes/fragment/2/node = SubResource( 2 )
-nodes/fragment/2/position = Vector2( -2.5, 193.5 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0 )
+nodes/fragment/2/position = Vector2( -260, 240 )
+nodes/fragment/4/node = SubResource( 6 )
+nodes/fragment/4/position = Vector2( -280, 360 )
+nodes/fragment/connections = PoolIntArray( 4, 0, 0, 0 )
 
 [sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
 shader = SubResource( 3 )
 
 [sub_resource type="Environment" id=5]
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 0.08
 ssao_enabled = true
-ssao_radius = 1.02
+ssao_radius = 2.23
+ssao_intensity = 4.63
+ssao_light_affect = 0.37
+ssao_color = Color( 0, 0.215686, 0.388235, 1 )
 ssao_quality = 2
-ssao_edge_sharpness = 18.96
+ssao_edge_sharpness = 10.21
 glow_enabled = true
 glow_intensity = 2.41
-glow_strength = 0.89
+glow_strength = 0.85
 glow_bloom = 0.22
 glow_hdr_threshold = 4.0
 glow_hdr_luminance_cap = 59.88
@@ -104,6 +120,7 @@ margin_left = 19.0
 margin_top = 19.0
 margin_right = 76.912
 margin_bottom = 18.8
+rect_pivot_offset = Vector2( 70, 69 )
 size_flags_horizontal = 3
 bbcode_enabled = true
 bbcode_text = "height :"
@@ -120,3 +137,25 @@ light_energy = 0.75
 light_indirect_energy = 0.0
 shadow_enabled = true
 shadow_contact = 0.141
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = -100.0
+margin_right = 797.0
+margin_bottom = -12.0
+text = "Controls
+SPACE --- main Booster Rocket
+W,A,S,D - control side thrusters
+
+HOLD U - use PID to balance and land"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="turbulence" type="Position3D" parent="."]
+script = ExtResource( 5 )
+
+[node name="RigidBody" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.559969, 0.100025, 6.04829 )

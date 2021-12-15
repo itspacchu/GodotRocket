@@ -10,6 +10,6 @@ func _ready():
 
 func _process(delta):
 	autopiloten = rocket.get("autopilot")
-	self.text = "height : " + str(round(rocket.translation.y)) + " m :: P** : " + str(autopiloten)
+	self.text = "height : " + str(round(rocket.translation.y)) + " m :: PID : " + str(autopiloten)
 	
 	
