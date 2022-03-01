@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://rocket.gd" type="Script" id=1]
 [ext_resource path="res://rocketmat.tres" type="Material" id=2]
@@ -41,7 +41,6 @@ void fragment() {
 
 // Output:0
 	EMISSION = n_out3p0;
-	RIM = dot(n_out2p0, vec3(0.333333, 0.333333, 0.333333));
 
 }
 
@@ -50,12 +49,12 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -266.4, 112 )
+graph_offset = Vector2( -284.8, 126.8 )
 nodes/fragment/2/node = SubResource( 6 )
-nodes/fragment/2/position = Vector2( -100, 380 )
+nodes/fragment/2/position = Vector2( -160, 240 )
 nodes/fragment/3/node = SubResource( 7 )
 nodes/fragment/3/position = Vector2( 120, 240 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 0, 10, 2, 0, 3, 0, 3, 0, 0, 5 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 3, 0, 3, 0, 0, 5 )
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = SubResource( 8 )
@@ -81,6 +80,13 @@ radius = 0.1
 height = 0.2
 radial_segments = 15
 rings = 11
+
+[sub_resource type="SpatialMaterial" id=11]
+emission_enabled = true
+emission = Color( 0.568627, 0.913725, 1, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
 
 [node name="RigidBody" type="RigidBody"]
 mass = 5.0
@@ -123,7 +129,6 @@ transform = Transform( 0.337528, 0, 0, 0, 0.257384, 0.218355, 0, -0.218355, 0.25
 layers = 2
 material_override = SubResource( 9 )
 cast_shadow = 0
-emitting = false
 amount = 120
 lifetime = 0.18
 preprocess = 0.53
@@ -138,7 +143,6 @@ transform = Transform( 0.337528, 0, 0, 0, 0.291634, -0.169926, 0, 0.169926, 0.29
 layers = 2
 material_override = SubResource( 9 )
 cast_shadow = 0
-emitting = false
 amount = 120
 lifetime = 0.18
 preprocess = 0.53
@@ -153,7 +157,6 @@ transform = Transform( -1.47538e-08, -0.218355, 0.257384, 0, 0.257384, 0.218355,
 layers = 2
 material_override = SubResource( 9 )
 cast_shadow = 0
-emitting = false
 amount = 120
 lifetime = 0.18
 preprocess = 0.53
@@ -168,7 +171,6 @@ transform = Transform( -1.47538e-08, 0.169926, 0.291634, 0, 0.291634, -0.169926,
 layers = 2
 material_override = SubResource( 9 )
 cast_shadow = 0
-emitting = false
 amount = 120
 lifetime = 0.18
 preprocess = 0.53
@@ -181,17 +183,20 @@ draw_pass_1 = SubResource( 5 )
 [node name="Booster" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00435162, -1.04836, -0.00256479 )
 layers = 2
-material_override = SubResource( 9 )
+material_override = SubResource( 11 )
 cast_shadow = 0
 emitting = false
 amount = 84
-lifetime = 0.46
+lifetime = 0.41
+preprocess = 0.08
 speed_scale = 1.2
+explosiveness = 0.14
 randomness = 0.39
 fixed_fps = 60
+fract_delta = false
 visibility_aabb = AABB( -0.323968, -0.196285, -0.283627, 0.647936, 0.39257, 0.567253 )
 local_coords = false
-draw_order = 1
+draw_order = 2
 process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
@@ -199,17 +204,140 @@ draw_pass_1 = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00435162, -0.227523, 0.00256479 )
 shadow_enabled = true
 omni_range = 9.937
-omni_attenuation = 7.38906
+omni_attenuation = 2.52344
+omni_shadow_mode = 0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="STATsplay" type="Control" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -282.0
-margin_top = -191.0
+margin_left = -300.0
+margin_top = -371.0
 margin_right = -1.0
-margin_bottom = -2.0
+margin_bottom = -85.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="D" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = 43.0
+margin_right = 80.5
+margin_bottom = 81.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="STATsplay/D"]
+margin_left = -46.5
+margin_right = -6.5
+margin_bottom = 40.0
+text = "
+D"
+
+[node name="D2" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = 72.0
+margin_right = 80.5
+margin_bottom = 110.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="I" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = -13.0
+margin_right = 80.5
+margin_bottom = 25.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="STATsplay/I"]
+margin_left = -46.5
+margin_top = -4.0
+margin_right = -6.5
+margin_bottom = 36.0
+text = "
+I"
+
+[node name="I2" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = 12.0
+margin_right = 80.5
+margin_bottom = 50.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="P" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = -68.0
+margin_right = 80.5
+margin_bottom = -30.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="STATsplay/P"]
+margin_left = -46.5
+margin_top = -3.0
+margin_right = -6.5
+margin_bottom = 37.0
+text = "
+P"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="P2" type="HSlider" parent="STATsplay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.5
+margin_top = -42.0
+margin_right = 80.5
+margin_bottom = -4.0
+min_value = -3.0
+max_value = 3.0
+step = 0.01
 __meta__ = {
 "_edit_use_anchors_": false
 }

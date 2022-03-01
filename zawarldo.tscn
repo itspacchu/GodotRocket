@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=18 format=2]
 
+[ext_resource path="res://compute_turbulence.gd" type="Script" id=1]
 [ext_resource path="res://RichTextLabel.gd" type="Script" id=2]
-[ext_resource path="res://CameraPos.gd" type="Script" id=3]
+[ext_resource path="res://CameraPos.tscn" type="PackedScene" id=3]
+[ext_resource path="res://WaypointHandler.gd" type="Script" id=4]
 [ext_resource path="res://rocket.tscn" type="PackedScene" id=6]
 
 [sub_resource type="BoxShape" id=1]
@@ -60,10 +62,22 @@ nodes/fragment/connections = PoolIntArray( 4, 0, 0, 0 )
 resource_local_to_scene = true
 shader = SubResource( 3 )
 
+[sub_resource type="ProceduralSky" id=8]
+texture_size = 0
+
 [sub_resource type="Environment" id=5]
-ambient_light_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-ambient_light_energy = 0.36
-tonemap_mode = 3
+background_mode = 2
+background_sky = SubResource( 8 )
+background_sky_custom_fov = 148.1
+background_color = Color( 0.392157, 0.305882, 0.305882, 1 )
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.53
+fog_enabled = true
+fog_color = Color( 0.380392, 0.486275, 0.592157, 1 )
+fog_sun_color = Color( 0.921569, 0.898039, 0.854902, 1 )
+fog_sun_amount = 0.25
+fog_depth_begin = 100.0
+fog_depth_end = 683.3
 ssao_enabled = true
 ssao_radius = 1.31
 ssao_intensity = 4.63
@@ -73,18 +87,40 @@ ssao_light_affect = 0.82
 ssao_quality = 2
 ssao_blur = 2
 ssao_edge_sharpness = 18.36
+dof_blur_far_distance = 20.0
+dof_blur_far_transition = 3.76
+dof_blur_far_amount = 0.14
 glow_enabled = true
-glow_intensity = 0.52
+glow_levels/1 = true
+glow_levels/3 = false
+glow_levels/5 = false
+glow_levels/7 = true
+glow_intensity = 0.4
 glow_strength = 0.85
-glow_bloom = 0.11
 glow_blend_mode = 1
 glow_hdr_threshold = 0.83
 glow_hdr_luminance_cap = 88.87
 glow_hdr_scale = 2.52
 glow_bicubic_upscale = true
 glow_high_quality = true
+adjustment_enabled = true
+
+[sub_resource type="BoxShape" id=9]
+
+[sub_resource type="SpatialMaterial" id=10]
+albedo_color = Color( 0.454902, 0.454902, 0.454902, 1 )
+
+[sub_resource type="SpatialMaterial" id=11]
+albedo_color = Color( 0.486275, 0.486275, 0.486275, 1 )
+
+[sub_resource type="SpatialMaterial" id=12]
+albedo_color = Color( 0.419608, 0.678431, 0.333333, 1 )
 
 [node name="Spatial" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="CameraPos" parent="." instance=ExtResource( 3 )]
+lerpSpeed = 3.0
 
 [node name="StaticBody" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0 )
@@ -100,32 +136,19 @@ depth = 100.0
 material = SubResource( 4 )
 
 [node name="mainRocket" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-
-[node name="CameraPos" type="Position3D" parent="."]
-transform = Transform( -4.27483e-08, -0.147619, 0.989044, -6.45264e-09, 0.989044, 0.147619, -1, -7.14837e-11, -4.32325e-08, 0, 0, 0 )
-script = ExtResource( 3 )
-targetNodePath = NodePath("../mainRocket")
-lerpSpeed = 10.0
-
-[node name="SpringArm" type="SpringArm" parent="CameraPos"]
-transform = Transform( 1, -2.08167e-17, 0, 4.16334e-17, 1, 3.09044e-18, 0, 3.09042e-18, 1, -7.10543e-15, 4.47007e-18, 1.44642 )
-spring_length = 5.0
-
-[node name="Camera" type="Camera" parent="CameraPos/SpringArm"]
-transform = Transform( 1, 0, 0, 0, 1, 3.88235e-23, 0, 3.88235e-23, 1, 0, 0, 0 )
-fov = 91.8
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248192, 3.09423, 0.00228121 )
+sideForce = 15.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-anchor_right = 0.212
-anchor_bottom = 0.477
-margin_left = 19.0
-margin_top = 19.0
-margin_right = 76.912
-margin_bottom = 18.8
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_top = -31.0
+margin_right = 554.0
+margin_bottom = -7.0
 rect_pivot_offset = Vector2( 70, 69 )
 size_flags_horizontal = 3
 bbcode_enabled = true
@@ -145,20 +168,257 @@ shadow_enabled = true
 shadow_contact = 0.783
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
-anchor_top = 0.614
-anchor_right = 0.02
-anchor_bottom = 0.627
-margin_left = 8.0
-margin_top = 110.6
-margin_right = 795.52
-margin_bottom = 301.8
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = -134.0
+margin_right = 820.0
+margin_bottom = -41.0
 text = "Controls:
 
 Arrows Keys to move target position
 A and D to rotate camera
 Q and E to adjust height
-F to drop land
-Y to add Random Turbulence"
+Y to enable Turbulence"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="StaticBody2" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.07954, 0, 0, 0, 2.07954, 0, 0, 0, 2.07954, 10.3821, 1.87633, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody2"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody2/CollisionShape"]
+material = SubResource( 10 )
+
+[node name="StaticBody4" type="StaticBody" parent="Spatial"]
+transform = Transform( 1.23871, 0, 0, 0, 1.23871, 0, 0, 0, 1.23871, 10.135, 0.468232, -16.3467 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody4"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody4/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody5" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -21.8278, 0.468232, -12.4906 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody5"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody5/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody6" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 2.33708, 0.468232, -21.3168 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody6"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody6/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody7" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -39.5659, 0.468232, -19.0031 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody7"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody7/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody8" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -31.8537, 0.468232, 1.47703 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody8"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody8/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody9" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 40.4696, 0.468232, 1.30564 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody9"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody9/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody10" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 38.4987, 0.468232, -3.32167 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody10"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody10/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody11" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 29.7582, 0.468232, -22.6879 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody11"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody11/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody12" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -11.0307, 0.468232, -35.1988 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody12"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody12/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody13" type="StaticBody" parent="Spatial"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -45.5643, 0.468232, -4.0929 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody13"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/StaticBody13/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="Spatial2" type="Spatial" parent="Spatial"]
+transform = Transform( -1.18284, 0, -0.25829, 0, 1, 0, 0.25829, 0, -1.18284, -7.22807, 0, -10.609 )
+
+[node name="StaticBody2" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.07954, 0, 0, 0, 2.07954, 0, 0, 0, 2.07954, 10.3821, 1.87633, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody2"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody2/CollisionShape"]
+material = SubResource( 10 )
+
+[node name="StaticBody4" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 1.23871, 0, 0, 0, 1.23871, 0, 0, 0, 1.23871, 10.135, 0.468232, -16.3467 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody4"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody4/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody5" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -21.8278, 0.468232, -12.4906 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody5"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody5/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody6" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 2.33708, 0.468232, -21.3168 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody6"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody6/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody7" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -39.5659, 0.468232, -19.0031 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody7"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody7/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody8" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -31.8537, 0.468232, 1.47703 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody8"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody8/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody9" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 40.4696, 0.468232, 1.30564 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody9"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody9/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody10" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 38.4987, 0.468232, -3.32167 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody10"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody10/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody11" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, 29.7582, 0.468232, -22.6879 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody11"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody11/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody12" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -11.0307, 0.468232, -35.1988 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody12"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody12/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="StaticBody13" type="StaticBody" parent="Spatial/Spatial2"]
+transform = Transform( 2.9297, 0, 0, 0, 2.9297, 0, 0, 0, 2.9297, -45.5643, 0.468232, -4.0929 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Spatial2/StaticBody13"]
+shape = SubResource( 9 )
+
+[node name="CSGBox" type="CSGBox" parent="Spatial/Spatial2/StaticBody13/CollisionShape"]
+material = SubResource( 11 )
+
+[node name="WaypointHandler" type="Spatial" parent="."]
+script = ExtResource( 4 )
+
+[node name="0" type="Position3D" parent="WaypointHandler"]
+
+[node name="1" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8966, 16.8646, 7.08086 )
+
+[node name="2" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3944, 35.2931, 5.75218 )
+
+[node name="3" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.2607, 47.7164, 2.33002 )
+
+[node name="4" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.4884, 68.3072, -7.9953 )
+
+[node name="5" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40431, 108.068, -14.4758 )
+
+[node name="6" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0614, 76.2599, -8.09988 )
+
+[node name="7" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.5115, 31.8832, -14.91 )
+
+[node name="8" type="Position3D" parent="WaypointHandler"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.1285, 3.11089, -9.62685 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="WaypointHandler/8"]
+transform = Transform( 1, 0, 0, 0, 2.41741, 0, 0, 0, 1, 0, -1.90812, 0 )
+use_collision = true
+radius = 1.60383
+height = 1.50397
+material = SubResource( 12 )

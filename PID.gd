@@ -7,6 +7,8 @@ var prev = 0.0
 var inte_d = 0.0
 var minimum_clamp = -10
 var maximum_clamp = 10
+var prop_d
+var diff_d
 	
 func _init(p,i,d):
 	self.kp = p
@@ -21,8 +23,10 @@ func _reset_integral():
 	self.inte_d = 0.0
 
 func _update(err,dt):
-	var prop_d = err*self.kp 
-	var diff_d = (err - self.prev)/dt
-	var inte_d = self.inte_d + err*dt
+	prop_d = err*self.kp 
+	diff_d = (err - self.prev)/dt
+	inte_d = self.inte_d + err*dt
 	self.prev = err
+	if(inte_d > self.maximum_clamp or inte_d < self.minimum_clamp):
+		self._reset_integral()
 	return clamp(self.kp*prop_d + self.ki*inte_d + self.kd*diff_d,minimum_clamp,maximum_clamp);
