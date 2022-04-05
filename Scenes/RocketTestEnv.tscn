@@ -1,0 +1,132 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Scenes/rocket.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/CameraPos.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/RocketTestEnv.tres" type="Environment" id=3]
+[ext_resource path="res://Scenes/OnScreenInformation.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/LandingSystem.gd" type="Script" id=5]
+
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 10, 10 )
+
+[sub_resource type="SpatialMaterial" id=4]
+params_diffuse_mode = 1
+albedo_color = Color( 0.396078, 0.396078, 0.396078, 1 )
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 5, 1, 5 )
+
+[node name="Root" type="Spatial"]
+
+[node name="StaticBody" type="StaticBody" parent="."]
+
+[node name="CSGMesh" type="CSGMesh" parent="StaticBody"]
+mesh = SubResource( 1 )
+material = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+shape = SubResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.176, 0, -20.649 )
+
+[node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody"]
+mesh = SubResource( 1 )
+material = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+shape = SubResource( 2 )
+
+[node name="StaticBody2" type="StaticBody" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.176, 0, -20.649 )
+
+[node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody2"]
+mesh = SubResource( 1 )
+material = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody/StaticBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+shape = SubResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="StaticBody/StaticBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.19, 0, 0 )
+
+[node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody2/StaticBody"]
+mesh = SubResource( 1 )
+material = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody/StaticBody2/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+shape = SubResource( 2 )
+
+[node name="RigidBody" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00084, 0 )
+
+[node name="CameraRoot" type="Spatial" parent="."]
+script = ExtResource( 2 )
+targetNodePath = NodePath("../RigidBody")
+lerpSpeed = 12.0
+
+[node name="SpringArm" type="SpringArm" parent="CameraRoot"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15971, 2.37277 )
+spring_length = 12.0
+
+[node name="Camera" type="Camera" parent="CameraRoot/SpringArm"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.36589 )
+environment = ExtResource( 3 )
+fov = 95.4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 3 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
+transform = Transform( 0.925613, 5.51708e-08, 0.378471, -0.298982, 0.613142, 0.731209, -0.232056, -0.789973, 0.567532, 0, 1.94975, 2.17626 )
+light_energy = 0.433
+shadow_enabled = true
+shadow_bias = 0.242
+shadow_contact = 0.851
+
+[node name="OnScreenInformation" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 4 )
+
+[node name="RocketRollYawPitch" type="RichTextLabel" parent="OnScreenInformation"]
+margin_left = 9.0
+margin_top = 10.0
+margin_right = 480.0
+margin_bottom = 50.0
+rect_pivot_offset = Vector2( 75, 20 )
+
+[node name="CheckButton" type="CheckButton" parent="OnScreenInformation"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 17.0
+margin_top = -58.0
+margin_right = 93.0
+margin_bottom = -18.0
+rect_pivot_offset = Vector2( 63, 21 )
+pressed = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="OnScreenInformation/CheckButton"]
+margin_left = 78.0
+margin_top = 14.0
+margin_right = 218.0
+margin_bottom = 40.0
+text = "PID Enable"
+
+[node name="LandingSystem" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0165749, 0.0630465, -0.0210929 )
+script = ExtResource( 5 )
+targetNodePath = NodePath("../RigidBody")
+
+[node name="END" type="Position3D" parent="LandingSystem"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9484, 0, -21.4668 )
+
+[node name="START" type="Position3D" parent="LandingSystem"]

@@ -1,0 +1,8 @@
+[gd_resource type="Environment" format=2]
+
+[resource]
+ambient_light_color = Color( 0.345098, 0.345098, 0.345098, 1 )
+ssao_enabled = true
+ssao_radius = 66.8
+ssao_intensity = 51.09
+ssao_light_affect = 0.01
