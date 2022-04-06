@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scenes/rocket.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/CameraPos.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/RocketTestEnv.tres" type="Environment" id=3]
 [ext_resource path="res://Scenes/OnScreenInformation.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/LandingSystem.gd" type="Script" id=5]
+[ext_resource path="res://Scenes/ShowPIDNetwork.gd" type="Script" id=6]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 10, 10 )
@@ -19,6 +20,12 @@ ao_texture_channel = 0
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 5, 1, 5 )
+
+[sub_resource type="Gradient" id=5]
+colors = PoolColorArray( 1, 0.0392157, 0.0392157, 1, 1, 0.0392157, 1, 1 )
+
+[sub_resource type="Gradient" id=6]
+colors = PoolColorArray( 0.0392157, 0.0392157, 1, 1, 0.0392157, 1, 1, 1 )
 
 [node name="Root" type="Spatial"]
 
@@ -80,6 +87,7 @@ spring_length = 12.0
 [node name="Camera" type="Camera" parent="CameraRoot/SpringArm"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.36589 )
 environment = ExtResource( 3 )
+current = true
 fov = 95.4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -120,6 +128,263 @@ margin_top = 14.0
 margin_right = 218.0
 margin_bottom = 40.0
 text = "PID Enable"
+
+[node name="ShowPIDNetwork" type="Control" parent="OnScreenInformation"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -765.0
+margin_bottom = -403.0
+rect_scale = Vector2( 1.5, 1.5 )
+script = ExtResource( 6 )
+
+[node name="ColorRect" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 16.0
+margin_top = 86.0
+margin_right = 31.0
+margin_bottom = 101.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 1, 0.0392157, 0.0392157, 1 )
+
+[node name="ColorRect7" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 232.0
+margin_top = 84.0
+margin_right = 247.0
+margin_bottom = 99.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 0.0392157, 1, 0.470588, 1 )
+
+[node name="ColorRect15" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 232.0
+margin_top = 37.0
+margin_right = 247.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 1, 0.0392157, 0, 1 )
+
+[node name="ColorRect16" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 232.0
+margin_top = 54.0
+margin_right = 247.0
+margin_bottom = 69.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 0.0392157, 0, 1, 1 )
+
+[node name="ColorRect12" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 233.0
+margin_top = 115.0
+margin_right = 248.0
+margin_bottom = 130.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 1, 0.0392157, 0.0392157, 1 )
+
+[node name="ColorRect13" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 233.0
+margin_top = 132.0
+margin_right = 248.0
+margin_bottom = 147.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 1, 0.0392157, 0.0392157, 1 )
+
+[node name="ColorRect14" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 233.0
+margin_top = 149.0
+margin_right = 248.0
+margin_bottom = 164.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 0.0392157, 0.0392157, 1, 1 )
+
+[node name="ColorRect17" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 233.0
+margin_top = 166.0
+margin_right = 248.0
+margin_bottom = 181.0
+rect_pivot_offset = Vector2( 187, 5 )
+color = Color( 0.0392157, 0.0392157, 1, 1 )
+
+[node name="ColorRect6" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 90.0
+margin_top = 85.0
+margin_right = 148.0
+margin_bottom = 100.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 1, 0.0392157, 0.0392157, 1 )
+
+[node name="ColorRect8" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 90.0
+margin_top = 101.0
+margin_right = 148.0
+margin_bottom = 116.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 0.0392157, 0.0392157, 1, 1 )
+
+[node name="ColorRect9" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 90.0
+margin_top = 117.0
+margin_right = 148.0
+margin_bottom = 132.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 0.0392157, 1, 0.0392157, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 16.0
+margin_top = 102.0
+margin_right = 31.0
+margin_bottom = 117.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 0.0392157, 0.0392157, 1, 1 )
+
+[node name="ColorRect3" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 16.0
+margin_top = 118.0
+margin_right = 31.0
+margin_bottom = 133.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 0.0392157, 1, 0.0392157, 1 )
+
+[node name="ColorRect4" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 16.0
+margin_top = 138.0
+margin_right = 31.0
+margin_bottom = 153.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 1, 0.0392157, 1, 1 )
+
+[node name="ColorRect5" type="ColorRect" parent="OnScreenInformation/ShowPIDNetwork"]
+margin_left = 16.0
+margin_top = 154.0
+margin_right = 31.0
+margin_bottom = 169.0
+rect_pivot_offset = Vector2( 36, 11 )
+color = Color( 0.0392157, 1, 1, 1 )
+
+[node name="Line2D" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+z_index = -4
+points = PoolVector2Array( 91, 88, 79, 88, 41, 94, 31, 94 )
+width = 2.0
+default_color = Color( 1, 0.0392157, 0.0392157, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="Line2D2" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork/Line2D"]
+position = Vector2( 0, 16 )
+points = PoolVector2Array( 91, 88, 82, 88, 44, 94, 31, 94 )
+width = 2.0
+default_color = Color( 0.0392157, 0.0392157, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="Line2D3" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork/Line2D"]
+position = Vector2( 0, 31 )
+points = PoolVector2Array( 90, 93, 70, 93, 45, 94, 31, 94 )
+width = 2.0
+default_color = Color( 0.0392157, 1, 0.0392157, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="Line2D5" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork/Line2D"]
+position = Vector2( 0, 51 )
+points = PoolVector2Array( 90, 47, 65, 47, 45, 95, 29, 95 )
+width = 2.0
+default_color = Color( 1, 0.470588, 1, 0.803922 )
+gradient = SubResource( 5 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="Line2D6" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork/Line2D"]
+position = Vector2( 0, 67 )
+points = PoolVector2Array( 90, 47, 74, 47, 54, 94, 31, 94 )
+width = 2.0
+default_color = Color( 0.470588, 1, 1, 1 )
+gradient = SubResource( 6 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="S_xp" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 117, -2 )
+z_index = -4
+points = PoolVector2Array( 117, 124, 82, 123, 51, 93, 29, 93 )
+width = 2.0
+default_color = Color( 1, 0.470588, 0.470588, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="TV_x" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 117, -2 )
+z_index = -4
+points = PoolVector2Array( 116, 46, 94, 46, 52, 89, 29, 89 )
+width = 2.0
+default_color = Color( 1, 0.470588, 0.470588, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="S_yp" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 117, -2 )
+z_index = -4
+points = PoolVector2Array( 117, 159, 89, 159, 55, 109, 30, 109 )
+width = 2.0
+default_color = Color( 0.470588, 0.470588, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="TV_z" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 117, -2 )
+z_index = -4
+points = PoolVector2Array( 116, 63, 95, 63, 55, 105, 30, 105 )
+width = 2.0
+default_color = Color( 0.470588, 0.470588, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="S_yn" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 115, 2 )
+z_index = -4
+points = PoolVector2Array( 119, 171, 88, 171, 54, 109, 32, 109 )
+width = 2.0
+default_color = Color( 0.470588, 0.470588, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="S_xn" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 117, -2 )
+z_index = -4
+points = PoolVector2Array( 117, 142, 87, 133, 50, 97, 30, 97 )
+width = 2.0
+default_color = Color( 1, 0.470588, 0.470588, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
+
+[node name="T_h" type="Line2D" parent="OnScreenInformation/ShowPIDNetwork"]
+position = Vector2( 116, 31 )
+z_index = -4
+points = PoolVector2Array( 117, 61, 94, 61, 65, 94, 31, 94 )
+width = 2.0
+default_color = Color( 0.470588, 1, 0.470588, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 1.0
 
 [node name="LandingSystem" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0165749, 0.0630465, -0.0210929 )

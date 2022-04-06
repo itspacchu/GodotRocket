@@ -22,6 +22,9 @@ func _set_range(minimum,maximum):
 func _reset_integral():
 	self.inte_d = 0.0
 
+func sumval():
+	return clamp(self.kp*prop_d + self.ki*inte_d + self.kd*diff_d,minimum_clamp,maximum_clamp);
+
 func _update(err,dt):
 	prop_d = err*self.kp 
 	diff_d = (err - self.prev)/dt

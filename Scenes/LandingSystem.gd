@@ -15,8 +15,3 @@ func _ready() -> void:
 	START = get_node("START")
 	END   = get_node("END")
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if(not done):
-		pass
