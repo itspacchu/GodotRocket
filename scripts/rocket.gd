@@ -25,13 +25,13 @@ var PID_tv_z = null
 
 func _ready():
 	#rotational side thrusters
-	PID_X = preload("res://scripts/PID.gd").new(2, 0.5, 0.6)
-	PID_Z = preload("res://scripts/PID.gd").new(2, 0.5, 0.6)
+	PID_X = preload("res://scripts/PID.gd").new(1, 0.9, 0.6)
+	PID_Z = preload("res://scripts/PID.gd").new(1, 0.9, 0.6)
 	#thrust vectoring
-	PID_tv_x = preload("res://scripts/PID.gd").new(1, 0.5, 0.25)
-	PID_tv_z = preload("res://scripts/PID.gd").new(1, 0.5, 0.25)
+	PID_tv_x = preload("res://scripts/PID.gd").new(0.75, 0.5, 0.25)
+	PID_tv_z = preload("res://scripts/PID.gd").new(0.75, 0.5, 0.25)
 	#height calib
-	PID_Ypos = preload("res://scripts/PID.gd").new(1.0, 0.01, 0.05)
+	PID_Ypos = preload("res://scripts/PID.gd").new(1.0, 0.1, 0.85)
 	PID_tv_x._set_range(-0.4,0.4)
 	PID_tv_z._set_range(-0.4,0.4)
 	PID_Ypos._set_range(0,3)
