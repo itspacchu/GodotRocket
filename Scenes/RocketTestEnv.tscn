@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/rocket.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/CameraPos.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/OnScreenInformation.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/LandingSystem.gd" type="Script" id=5]
 [ext_resource path="res://Scenes/ShowPIDNetwork.gd" type="Script" id=6]
+[ext_resource path="res://Scenes/DrawGrid.gd" type="Script" id=7]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 10, 10 )
@@ -27,6 +28,19 @@ colors = PoolColorArray( 1, 0.0392157, 0.0392157, 1, 1, 0.0392157, 1, 1 )
 [sub_resource type="Gradient" id=6]
 colors = PoolColorArray( 0.0392157, 0.0392157, 1, 1, 0.0392157, 1, 1, 1 )
 
+[sub_resource type="ArrayMesh" id=7]
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2, 2, 2 ),
+"array_data": PoolByteArray( 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 0, 0 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 3, 0, 4, 0, 3, 0, 4, 0, 5, 0, 6, 0, 5, 0, 6, 0, 7, 0, 0, 0, 7, 0, 8, 0, 9, 0, 10, 0, 9, 0, 10, 0, 11, 0, 12, 0, 11, 0, 12, 0, 13, 0, 14, 0, 13, 0, 14, 0, 15, 0, 8, 0, 15, 0 ),
+"blend_shape_data": [  ],
+"format": 2194689,
+"index_count": 32,
+"primitive": 1,
+"skeleton_aabb": [  ],
+"vertex_count": 16
+}
+
 [node name="Root" type="Spatial"]
 
 [node name="StaticBody" type="StaticBody" parent="."]
@@ -40,7 +54,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 2 )
 
 [node name="StaticBody" type="StaticBody" parent="StaticBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.176, 0, -20.649 )
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, 15.176, 0, -49.0593 )
 
 [node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody"]
 mesh = SubResource( 1 )
@@ -50,30 +64,9 @@ material = SubResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 2 )
 
-[node name="StaticBody2" type="StaticBody" parent="StaticBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.176, 0, -20.649 )
-
-[node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody2"]
-mesh = SubResource( 1 )
-material = SubResource( 4 )
-
-[node name="CollisionShape" type="CollisionShape" parent="StaticBody/StaticBody2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
-shape = SubResource( 2 )
-
-[node name="StaticBody" type="StaticBody" parent="StaticBody/StaticBody2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.19, 0, 0 )
-
-[node name="CSGMesh" type="CSGMesh" parent="StaticBody/StaticBody2/StaticBody"]
-mesh = SubResource( 1 )
-material = SubResource( 4 )
-
-[node name="CollisionShape" type="CollisionShape" parent="StaticBody/StaticBody2/StaticBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
-shape = SubResource( 2 )
-
 [node name="RigidBody" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00084, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0 )
+axis_lock_angular_y = true
 
 [node name="CameraRoot" type="Spatial" parent="."]
 script = ExtResource( 2 )
@@ -81,8 +74,8 @@ targetNodePath = NodePath("../RigidBody")
 lerpSpeed = 12.0
 
 [node name="SpringArm" type="SpringArm" parent="CameraRoot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15971, 2.37277 )
-spring_length = 12.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08261, 0.380618 )
+spring_length = 5.0
 
 [node name="Camera" type="Camera" parent="CameraRoot/SpringArm"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.36589 )
@@ -95,14 +88,16 @@ environment = ExtResource( 3 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( 0.925613, 5.51708e-08, 0.378471, -0.298982, 0.613142, 0.731209, -0.232056, -0.789973, 0.567532, 0, 1.94975, 2.17626 )
-light_energy = 0.433
+light_indirect_energy = 5.169
 shadow_enabled = true
-shadow_bias = 0.242
-shadow_contact = 0.851
+shadow_reverse_cull_face = true
+directional_shadow_mode = 1
 
 [node name="OnScreenInformation" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -610.0
+margin_bottom = -255.0
 script = ExtResource( 4 )
 
 [node name="RocketRollYawPitch" type="RichTextLabel" parent="OnScreenInformation"]
@@ -132,8 +127,8 @@ text = "PID Enable"
 [node name="ShowPIDNetwork" type="Control" parent="OnScreenInformation"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -765.0
-margin_bottom = -403.0
+margin_right = -748.0
+margin_bottom = -391.0
 rect_scale = Vector2( 1.5, 1.5 )
 script = ExtResource( 6 )
 
@@ -392,6 +387,15 @@ script = ExtResource( 5 )
 targetNodePath = NodePath("../RigidBody")
 
 [node name="END" type="Position3D" parent="LandingSystem"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9484, 0, -21.4668 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6007, 0, -51.3757 )
 
 [node name="START" type="Position3D" parent="LandingSystem"]
+
+[node name="DrawGrid" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.27905, 0, -8.29692 )
+visible = false
+mesh = SubResource( 7 )
+material/0 = null
+script = ExtResource( 7 )
+sides = false
+split = 0.5

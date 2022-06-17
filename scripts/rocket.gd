@@ -2,14 +2,17 @@ extends RigidBody
 export (float) var thrustForce:float = 20;
 export (float) var sideForce:float = 10;
 export (float) var speed:float = 0; 
+
 var thrustloc = Vector3(0,-1,0);
 export var autopilot:bool = true
 var landingmode:bool = false
 var oldP = true;
+
 export var target_rot = Vector3(0,0,0)
 export var target_pos = Vector3(0,1,0)
 export var thrust_vec = Vector3(0.0,0,0.0)
 
+var tgupdown:float = 0;
 
 var PID_X = null
 var PID_Z = null
@@ -25,37 +28,40 @@ func _ready():
 	PID_X = preload("res://scripts/PID.gd").new(2, 0.5, 0.6)
 	PID_Z = preload("res://scripts/PID.gd").new(2, 0.5, 0.6)
 	#thrust vectoring
-	PID_tv_x = preload("res://scripts/PID.gd").new(0.7, 0.5, 0.25)
-	PID_tv_z = preload("res://scripts/PID.gd").new(0.7, 0.5, 0.25)
+	PID_tv_x = preload("res://scripts/PID.gd").new(1, 0.5, 0.25)
+	PID_tv_z = preload("res://scripts/PID.gd").new(1, 0.5, 0.25)
 	#height calib
-	PID_Ypos = preload("res://scripts/PID.gd").new(1.5, 0.0, 0.85)
+	PID_Ypos = preload("res://scripts/PID.gd").new(1.0, 0.01, 0.05)
 	PID_tv_x._set_range(-0.4,0.4)
 	PID_tv_z._set_range(-0.4,0.4)
 	PID_Ypos._set_range(0,3)
 
 
 func _process(delta):
-	DebugDraw.draw_box(target_pos - Vector3(0.5,0.5,0.5),Vector3.ONE,Color(0,0,0))
+	DebugDraw.draw_box(target_pos - Vector3(0.5,0.5,0.5),Vector3.ONE,Color(0.5,0.5,0.5))
 	$Booster/OmniLight.light_energy = 5*int($Booster.emitting)
 	
 	if(Input.is_key_pressed(KEY_Y)):
 		self.apply_torque_impulse(Vector3(rand_range(-3,3),0,rand_range(-3,3)))
-
+	
+	
+	self.apply_torque_impulse(0.01*sideForce*transform.basis.y*delta)
 	var in_h = - Input.get_action_strength("ui_right") + Input.get_action_strength("ui_left")
 	var in_v = Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
 	var inUpact = Input.get_action_strength("tg_up")
 	var inDownact = Input.get_action_strength("tg_down")
+	
 	if(Input.get_action_strength("tg_up")):
-		target_pos.y += lerp(inUpact,1,delta*0.01)*(thrustForce/2)*delta/4;
+		target_pos.y += lerp(inUpact,1,delta*0.01)*(thrustForce)*delta/10;
 	if(Input.get_action_strength("tg_down") and target_pos.y > 0):
-		target_pos.y -= lerp(inDownact,0,delta*0.1)*(thrustForce/2)*delta/4;
-	elif(target_pos.y <= 0):
+		target_pos.y -= lerp(inDownact,0,delta*0.1)*(thrustForce)*delta/10;
+	if(target_pos.y <= 0):
 		target_pos.y = 0.1
 	
 	
 	
-	target_pos.x -= in_h*delta*10
-	target_pos.z -= in_v*delta*10
+	target_pos.x -= in_h*delta*5
+	target_pos.z -= in_v*delta*5
 
 		
 func _physics_process(delta):	
@@ -96,61 +102,31 @@ func _apply_corr(delta):
 		self.apply_torque_impulse(sideForce*pidx*transform.basis.x*delta)
 		self.apply_torque_impulse(sideForce*pidz*transform.basis.z*delta)
 		self.add_force(thrustForce*pidh*transform.basis.y,thrustloc + thrust_vec)
-	else:
-		var diffx = self.translation.x - self.target_pos.x
-		var diffz = self.translation.z - self.target_pos.z
-		var diffh = self.target_pos.y - self.translation.y
+
 		
-		self.apply_torque_impulse(-sideForce*diffx*transform.basis.x*delta*0.1)
-		self.apply_torque_impulse(-sideForce*diffh*transform.basis.z*delta*0.1)
-		self.add_force(thrustForce*diffh*transform.basis.y,thrustloc + thrust_vec)
+	animate_thrusters(pidx,pidz,pidh,autopilot)
+	
+	#DebugDraw.draw_line_3d(self.translation,self.translation+ 2*thrust_vec,Color(1,0.75,0.4));
+	
+	$STATsplay/Control/D.value = PID_X.diff_d
+	$STATsplay/Control/D/D2.value = PID_Z.diff_d
+	$STATsplay/Control/I.value = PID_X.inte_d
+	$STATsplay/Control/I/I2.value = PID_Z.inte_d
+	$STATsplay/Control/P.value = PID_X.prop_d
+	$STATsplay/Control/P/P2.value = PID_Z.prop_d
+	
+	$STATsplay/Control/H.value = PID_Ypos.prop_d
+	$STATsplay/Control/H/H2.value = PID_Ypos.inte_d
+	$STATsplay/Control/H/H3.value = PID_Ypos.diff_d
+
 		
-	if(autopilot):
-		animate_thrusters(pidx,pidz)
-	
-	DebugDraw.draw_line_3d(self.translation,self.translation+ 2*thrust_vec,Color(1,0.75,0.4));
-	
-	$STATsplay/D.value = PID_X.diff_d
-	$STATsplay/D2.value = PID_Z.diff_d
-	$STATsplay/I.value = PID_X.inte_d
-	$STATsplay/I2.value = PID_Z.inte_d
-	$STATsplay/P.value = PID_X.prop_d
-	$STATsplay/P2.value = PID_Z.prop_d
-	
-	$STATsplay/H.value = PID_Ypos.prop_d
-	$STATsplay/H2.value = PID_Ypos.inte_d
-	$STATsplay/H3.value = PID_Ypos.diff_d
-	
-		
-func animate_thrusters(x,z,enabled=true):
+func animate_thrusters(x,z,y,enabled=true):
 	if(enabled):
-		if(x > 0.05):
-			$SideZp.emitting = true;
-		else:
-			$SideZp.emitting = false;
-		if(x < -0.05):
-			$SideZn.emitting = true;
-		else:
-			$SideZn.emitting = false;
-		if(z > 0.05):
-			$SideXn.emitting = true;
-		else:
-			$SideXn.emitting = false;
-		if(z < -0.05):
-			$SideXp.emitting = true;
-		else:
-			$SideXp.emitting = false;		
-		if(self.linear_velocity.length() > 0.1  || (self.translation.y > 1.2)):
-			$Booster.emitting= true
-		else:
-			$Booster.emitting= false
-		$Booster.translation = thrustloc
-		var tv = Vector3(-thrust_vec.z,-1,-thrust_vec.x)
-		$Booster.rotation = tv
-		$Booster.lifetime = speed/25
+		$DroneRootRocket/lower/bldc/BLDC/fan/mainfan/MotionTrail3.trailEnabled = true
+		$DroneRootRocket/Movables/vane_4x.set_rotation_degrees(Vector3(0,0,atan(-z)*40))
+		$DroneRootRocket/Movables/vane_4x2.set_rotation_degrees(Vector3(0,90,atan(-x)*40))
+		$DroneRootRocket/Movables/vane_4x3.set_rotation_degrees(Vector3(0,180,atan(z)*40))
+		$DroneRootRocket/Movables/vane_4x4.set_rotation_degrees(Vector3(0,270,atan(x)*40))
+		$DroneRootRocket/lower/bldc/BLDC/fan/mainfan.rotate_object_local(Vector3(0,0,1),atan(self.translation.y - 0.6)*15)
 	else:
-		$SideZp.emitting = false
-		$SideXn.emitting = false
-		$SideXp.emitting = false
-		$SideZn.emitting = false
-		$Booster.emitting = false
+		$DroneRootRocket/lower/bldc/BLDC/fan/mainfan/MotionTrail3.trailEnabled = false

@@ -1,8 +1,18 @@
-[gd_resource type="Environment" format=2]
+[gd_resource type="Environment" load_steps=2 format=2]
+
+[sub_resource type="ProceduralSky" id=1]
+radiance_size = 0
 
 [resource]
-ambient_light_color = Color( 0.345098, 0.345098, 0.345098, 1 )
+background_mode = 2
+background_sky = SubResource( 1 )
+background_color = Color( 0.1, 0.1, 0.1, 1 )
+ambient_light_color = Color( 0.1494, 0.16674, 0.18, 1 )
+tonemap_mode = 3
 ssao_enabled = true
-ssao_radius = 66.8
-ssao_intensity = 51.09
-ssao_light_affect = 0.01
+ssao_radius = 7.91
+ssao_intensity = 5.05
+ssao_radius2 = 5.53
+ssao_intensity2 = 2.84
+ssao_light_affect = 0.51
+ssao_edge_sharpness = 0.0
